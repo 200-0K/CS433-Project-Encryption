@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 interface FileReadCallback {
-    void callback(byte[] fileBytes);
+    void callback(byte[] fileBytes, boolean isFinal);
 }
 
 public class FileSystem {
@@ -59,9 +59,10 @@ public class FileSystem {
         byte[] fileBytes;
         int available;
         while ((available = fInputStream.available()) != 0) {
-            int readBytes = (available > BUFFER_SIZE_BYTES) ? BUFFER_SIZE_BYTES : available;
+            boolean isFinal = (BUFFER_SIZE_BYTES >= available);
+            int readBytes = (isFinal) ? available : BUFFER_SIZE_BYTES;
             fileBytes = fInputStream.readNBytes(readBytes);
-            callback.callback(fileBytes);
+            callback.callback(fileBytes, isFinal);
         }
         fInputStream.close();
     }
