@@ -18,9 +18,13 @@ public class FileSystem {
         this.file = file;
     }
 
+    public FileSystem[] getFiles() {return getFiles(null);}
     public FileSystem[] getFiles(String suffix) {
         if (!file.isDirectory()) return null;
-        File[] filteredFiles = file.listFiles((File file) -> file.getAbsolutePath().endsWith(suffix));
+        
+        File[] filteredFiles;
+        if (suffix == null) filteredFiles = file.listFiles();
+        else filteredFiles = file.listFiles((File file) -> file.getAbsolutePath().endsWith(suffix));
 
         FileSystem[] files = new FileSystem[filteredFiles.length];
         for (int i = 0; i < filteredFiles.length; i++)
@@ -34,9 +38,33 @@ public class FileSystem {
     public File getFile() {
         return this.file;
     }
+    
+    /**
+     * Create a new file sibiling to the current file if 
+     * it is a file and not a directory, or a new file within a 
+     * directory if the current file is a directory
+     * 
+     * @param fileName in the form [name].[ext]
+     * @return new <code>FileSystem</code> object with respect to the current <code>FileSystem</code> file location
+     * @throws IOException if an I/O error occurs
+     */
+    public FileSystem createFile(String fileName) throws IOException {
+        File newFile = file;
+        if (file.isFile()) newFile = file.getParentFile();
+        
+        newFile = newFile.toPath().resolve(fileName).toFile();
+        newFile.createNewFile();
+        return new FileSystem(newFile);
+    }
 
-    public FileSystem createSiblingFile(String fileName) throws IOException {
-        return createFile(file.getParentFile().toPath().resolve(fileName).toFile());
+    public FileSystem createDirectory(String dirName) {
+        File newDir = file.toPath().resolve(dirName).toFile();
+        newDir.mkdir();
+        try {
+            return new FileSystem(newDir);
+        } catch (FileNotFoundException e) {e.printStackTrace();}
+        
+        return null;
     }
 
     /**
@@ -71,11 +99,5 @@ public class FileSystem {
         FileOutputStream fInputStream = new FileOutputStream(file, true);
         fInputStream.write(content);
         fInputStream.close();
-    }
-
-    public static FileSystem createFile(String path) throws IOException {return createFile(new File(path));}
-    public static FileSystem createFile(File file) throws IOException {
-        file.createNewFile();
-        return new FileSystem(file);
     }
 }
