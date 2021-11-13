@@ -58,14 +58,16 @@ public class Encrypt {
         this.key = new SecretKeySpec(key, this.transformation.getAlgorithm()); 
     }
 
-    public byte[] encrypt() throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public void encryptMode() throws InvalidKeyException {
         cipher.init(Cipher.ENCRYPT_MODE, key);
-        return cipher.doFinal(text);
     }
 
-    public byte[] decrypt() throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public void decryptMode() throws InvalidKeyException {
         cipher.init(Cipher.DECRYPT_MODE, key);
-        return cipher.doFinal(text);
+    }
+
+    public byte[] update(boolean isFinal) throws IllegalBlockSizeException, BadPaddingException {
+        return (isFinal) ? cipher.doFinal(text) : cipher.update(text);
     }
 
     public int getKeySizeInBytes() {
