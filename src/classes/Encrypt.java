@@ -1,3 +1,4 @@
+package classes;
 import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -7,9 +8,12 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-
+/**
+ * <p> To Use: Set Tranformation ➔ Set Key ➔ Set Mode </p>
+ * <p> Loop: Set Text ➔ Update </p>
+ */
 public class Encrypt {
-    public static enum TRANSFORMATION {
+    public enum TRANSFORMATION {
         AES("AES", 24), 
         TDES("DESede", 24);
 
@@ -33,27 +37,19 @@ public class Encrypt {
     private Key key;
     private Cipher cipher;
 
-    public Encrypt(Encrypt.TRANSFORMATION transformation) throws NoSuchAlgorithmException, NoSuchPaddingException {
-        this.setAlgorithm(transformation);
-    }
+    private Encrypt(){}
 
     public void setAlgorithm(Encrypt.TRANSFORMATION transformation) throws NoSuchAlgorithmException, NoSuchPaddingException  {
         this.transformation = transformation;
         cipher = Cipher.getInstance(transformation.getTransformation());
     }
 
-    public void setText(String text) {
-        this.setText(text.getBytes(Charset.forName(CHARSET)));
-    }
-
+    public void setText(String text) {this.setText(text.getBytes(Charset.forName(CHARSET)));}
     public void setText(byte[] text) {
         this.text = text;
     }
 
-    public void setKey(String key) {
-        this.setKey(key.getBytes(Charset.forName(CHARSET)));
-    }
-
+    public void setKey(String key) {this.setKey(key.getBytes(Charset.forName(CHARSET)));}
     public void setKey(byte[] key) {
         this.key = new SecretKeySpec(key, this.transformation.getAlgorithm()); 
     }
@@ -70,7 +66,40 @@ public class Encrypt {
         return (isFinal) ? cipher.doFinal(text) : cipher.update(text);
     }
 
-    public int getKeySizeInBytes() {
-        return transformation.getKeySizeInBytes();
-    }    
+    public TRANSFORMATION getTransformation() {
+        return transformation;
+    }
+
+    public static class Builder {
+        private TRANSFORMATION tr;
+        private String key;
+        private boolean isEncryptMode;
+
+        public Builder setAlgorithm(TRANSFORMATION tr) {
+            this.tr = tr;
+            return this;
+        }
+
+        public Builder setKey(String key) {
+            this.key = key;
+            return this;
+        }
+
+        public Builder setEncryptionMode(boolean isEncryptMode) {
+            this.isEncryptMode = isEncryptMode;
+            return this;
+        }
+
+        public Encrypt build() {
+            Encrypt encrypt = null;
+            try {
+                encrypt = new Encrypt();
+                encrypt.setAlgorithm(tr);
+                encrypt.setKey(key);
+                if (isEncryptMode) encrypt.encryptMode();
+                else encrypt.decryptMode();
+            } catch (Exception e) {e.printStackTrace();}
+            return encrypt;
+        }
+    }
 }

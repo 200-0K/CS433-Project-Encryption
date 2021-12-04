@@ -1,15 +1,12 @@
+package utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-interface FileReadCallback {
-    void callback(byte[] fileBytes, boolean isFinal);
-}
-
 public class FileSystem {
-    public static final int BUFFER_SIZE_BYTES = 10000000; // 10MB
+    public static final int BUFFER_SIZE_BYTES = 500000000; // 500MB
     private File file;
 
     public FileSystem(String path) throws FileNotFoundException {this(new File(path));}
@@ -18,13 +15,28 @@ public class FileSystem {
         this.file = file;
     }
 
-    public FileSystem[] getFiles() {return getFiles(null);}
-    public FileSystem[] getFiles(String suffix) {
+    /**
+     * Get all files within current <code>FileSystem</code>
+     * @return <code>FileSystem[]</code> contains all files matching the filters | 
+     * <code>null</code> if the current <code>FileSystem</code> is not a directory
+     */
+    public FileSystem[] getFiles() {return getFiles(null, false);}
+    /**
+     * Get all files within current <code>FileSystem</code>
+     * 
+     * @param suffix filter files by file name sffuix | pass <code>null</code> to skip suffix filtering
+     * @param excludeDirectories only get files not folder/directories
+     * @return <code>FileSystem[]</code> contains all files matching the filters | 
+     * <code>null</code> if the current <code>FileSystem</code> is not a directory
+     */
+    public FileSystem[] getFiles(String suffix, boolean excludeDirectories) {
         if (!file.isDirectory()) return null;
         
         File[] filteredFiles;
-        if (suffix == null) filteredFiles = file.listFiles();
-        else filteredFiles = file.listFiles((File file) -> file.getAbsolutePath().endsWith(suffix));
+        filteredFiles = file.listFiles((File file) -> 
+            (suffix != null ? file.getAbsolutePath().endsWith(suffix) : true) &&
+            (excludeDirectories ? file.isFile() : true)
+        );
 
         FileSystem[] files = new FileSystem[filteredFiles.length];
         for (int i = 0; i < filteredFiles.length; i++)
@@ -57,14 +69,20 @@ public class FileSystem {
         return new FileSystem(newFile);
     }
 
-    public FileSystem createDirectory(String dirName) {
-        File newDir = file.toPath().resolve(dirName).toFile();
+    /**
+     * <p>Create and return a directory <code>FileSystem</code> if not exists</p>
+     * <p>If current <code>FileSystem</code> is a file, then create a directory at the same level i.e. its parent</p>
+     * 
+     * @param dirName directory name that will be created
+     * @return directory <code>FileSystem</code> is created or exists or <code>null</code> otherwise
+     */
+    public FileSystem createDirectory(String dirName) throws FileNotFoundException {
+        File newDir = file;
+        if (file.isFile()) newDir = file.getParentFile();
+        newDir = newDir.toPath().resolve(dirName).toFile();
+
         newDir.mkdir();
-        try {
-            return new FileSystem(newDir);
-        } catch (FileNotFoundException e) {e.printStackTrace();}
-        
-        return null;
+        return new FileSystem(newDir);
     }
 
     /**
