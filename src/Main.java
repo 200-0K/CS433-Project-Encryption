@@ -1,5 +1,5 @@
 import menus.EncryptMenu;
-import utils.Timer;
+import menus.HashMenu;
 import utils.UserInput;
 
 public class Main {
@@ -21,7 +21,7 @@ public class Main {
                 int num = UserInput.getNumberFromUser();
 
                 if (num == 1) new EncryptMenu().run();
-                // else if (num == 2) //TODO: HashMenu
+                else if (num == 2) new HashMenu().run();
                 else if (num == 3) return;
                 else continue;
 

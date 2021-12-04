@@ -13,7 +13,7 @@ import utils.FileSystem;
 import utils.UserInput;
 import utils.Timer;
 
-public class EncryptMenu {
+public class EncryptMenu implements IMenu{
     private enum MODE {
         Encrypt("Encrypt", "Encryption_"+System.currentTimeMillis(), true),
         Decrypt("Decrypt", "Decryption_"+System.currentTimeMillis(), false);
