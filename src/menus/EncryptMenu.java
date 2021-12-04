@@ -16,7 +16,7 @@ import utils.Timer;
 public class EncryptMenu {
     private enum MODE {
         Encrypt("Encrypt", "Encryption_"+System.currentTimeMillis(), true),
-        Decrypt("Decrypt", "Encryption_"+System.currentTimeMillis(), false);
+        Decrypt("Decrypt", "Decryption_"+System.currentTimeMillis(), false);
 
         private String mode;
         private String dirName;
@@ -184,8 +184,7 @@ public class EncryptMenu {
                             System.gc(); // run java garbage collector
                         }
                     } catch (IllegalBlockSizeException | BadPaddingException e) {
-                        System.out.println("Encryption/Decryption Failed");
-                        e.printStackTrace();
+                        System.out.println("Encryption/Decryption Failed: " + e.getMessage());
                         return;
                     } catch (IOException e) {
                         System.out.println("I/O Error");
