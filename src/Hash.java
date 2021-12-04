@@ -11,17 +11,6 @@ public class Hash {
 
     MessageDigest SHADigest;
 
-        public static void main(String[] arge) throws Exception{
-        Hash HASH = new Hash();
-        HASH.setText("test");
-        HASH.setAlgorithm("SHA-512");
-        HASH.update();
-        
-        System.out.println(new BigInteger(1, HASH.digest()).toString(16));
-
-    }
-
-
     public void setText(String text) {  this.text = text.getBytes(); }
     public void setAlgorithm(String Algorithm) throws Exception { SHADigest = MessageDigest.getInstance(Algorithm); }
     public byte[] digest() { return SHADigest.digest(); }
