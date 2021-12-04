@@ -1,53 +1,31 @@
-import java.io.File;
 import java.security.MessageDigest;
 import java.util.Scanner;
+import java.math.BigInteger;
 
 public class Hash {
 
-    public static void main(String[] arge) {
+    private byte[] text;
+    private String Algorithm;
+    private String hashValue;
+    private byte[] digest;
 
-        Scanner input = new Scanner(System.in);
+    MessageDigest SHADigest;
 
-        System.out.print("Enter full path of your file : ");
-        String PathFile = input.nextLine();
-
-        System.out.print("Chooce the Algorithm (SHA-256 , SHA-512) : ");
-        String TypeAlgorthim = input.nextLine();
-
-        System.out.print(Hashfunction(PathFile, TypeAlgorthim));
+        public static void main(String[] arge) throws Exception{
+        Hash HASH = new Hash();
+        HASH.setText("test");
+        HASH.setAlgorithm("SHA-512");
+        HASH.update();
+        
+        System.out.println(new BigInteger(1, HASH.digest()).toString(16));
 
     }
 
-    public static String Hashfunction(String FailePath, String algorithm) {
 
-        String hashValue = "";
-
-        try {
-            String DataOfHash = ""; // To save text from the faile
-            File MyFile = new File(FailePath + ".txt"); 
-            Scanner myReader = new Scanner(MyFile);
-
-           // To read file 
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                DataOfHash = data;
-            }
-            myReader.close();
-           
-            MessageDigest SHADigest = MessageDigest.getInstance(algorithm);
-             SHADigest.update(DataOfHash.getBytes());
-              byte[] digest = SHADigest.digest();
-               
-              StringBuffer Sb = new StringBuffer(); 
-                for (byte A : digest) {
-                    Sb.append(String.format("%02x", A & 0xff));
-                    hashValue = Sb.toString();
-            }
-        } catch (Exception e) {
-
-        }
-        return hashValue;
-    }
+    public void setText(String text) {  this.text = text.getBytes(); }
+    public void setAlgorithm(String Algorithm) throws Exception { SHADigest = MessageDigest.getInstance(Algorithm); }
+    public byte[] digest() { return SHADigest.digest(); }
+    public void update() { SHADigest.update(text); } 
 
 }
 
