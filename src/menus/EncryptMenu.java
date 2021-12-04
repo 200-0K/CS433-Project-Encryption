@@ -46,7 +46,7 @@ public class EncryptMenu {
     public void run() {
         while (true) {
             if (!selectModeMenu()) return;
-            if (!getFileMenu()) return;
+            this.fileSystem = UserInput.getFileSystemFromUser();
             if (!selectAlogrithmMenu()) return;
             if (!enterSecretKeyMenu()) return;
             
@@ -95,18 +95,6 @@ public class EncryptMenu {
                 System.out.println("Please choose a number from the list");
             }
         }
-    }
-
-    private boolean getFileMenu() {
-        System.out.println();
-
-        System.out.print("Type File/Directory Path: ");
-        try {
-            this.fileSystem = new FileSystem(UserInput.getFileFromUser());
-            return true;
-        } catch (FileNotFoundException e) {e.printStackTrace();}
-
-        return false;
     }
 
     private boolean selectAlogrithmMenu() {

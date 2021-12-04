@@ -1,5 +1,4 @@
 package utils;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -25,16 +24,16 @@ public class UserInput {
         return num;
     }
 
-    public static File getFileFromUser() {
+    public static FileSystem getFileSystemFromUser() {
         Scanner sc = new Scanner(System.in);
-        File file;
+        FileSystem file;
+        System.out.print("Type File/Directory Path: ");
         while(true) {
             String path = "";
             try {
                 path = sc.nextLine();
-                file = new File(path);
-                if (file.exists()) break;
-                throw new FileNotFoundException();
+                file = new FileSystem(path);
+                break;
             } catch (FileNotFoundException e) {
                 System.out.println("'"+path+"'"+" is not a path for a file or directory, try again");
             }
