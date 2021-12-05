@@ -7,7 +7,7 @@ $> "path/to/jdk≥11/bin/java.exe" -cp out\ Main
 ```
 Or download & run the latest `jar` file from [release](https://github.com/200-0K/CS433-Project-Encryption/releases), with the following command:
 ```bash
-$> "path/to/jdk≥11/bin/java.exe" -jar Encryption.jar
+$> "path/to/jdk≥11/bin/java.exe" -jar "path/to/Encryption.jar"
 ```
 
 ## Features
