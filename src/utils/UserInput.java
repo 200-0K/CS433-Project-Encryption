@@ -15,7 +15,7 @@ public class UserInput {
                 System.out.println("You must enter a number, try again");
                 sc.nextLine(); // important to clear the buffer
             } catch (Exception e) {
-                System.out.println("Error"+e.getMessage()+", try again");
+                System.out.println("Error "+e.getMessage()+", try again");
                 e.printStackTrace();
                 sc.nextLine(); // important to clear the buffer
             }
