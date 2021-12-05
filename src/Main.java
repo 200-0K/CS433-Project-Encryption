@@ -1,32 +1,25 @@
-import menus.EncryptMenu;
-import menus.HashMenu;
+import menus.Menu;
 import utils.UserInput;
 
 public class Main {
     public static void main(String[] args) {
-        mainMenu();
-    }
-
-    static void mainMenu() {
+        Menu[] menus = Menu.values();
         while (true) {
-            System.out.println("MAIN MENU");
-            System.out.println("==========================================================================");
-            System.out.println("What do you need to implement?");
-            System.out.println("1. Encryption");
-            System.out.println("2. Hashing");
-            System.out.println("3. Exit");
+            StringBuilder sBuilder = new StringBuilder();
+            sBuilder.append("MAIN MENU\n");
+            sBuilder.append("==========================================================================\n");
+            sBuilder.append("What do you need to implement?\n");
+            for (int i = 0; i < menus.length; i++) sBuilder.append(i+1).append(". ").append(menus[i].getMenuName()).append("\n");
+            
+            int exitNum = menus.length+1;
+            sBuilder.append(exitNum).append(". Exit");
 
-            while (true) {
-                System.out.print("Enter your choice: ");
-                int num = UserInput.getNumberFromUser();
-
-                if (num == 1) new EncryptMenu().run();
-                else if (num == 2) new HashMenu().run();
-                else if (num == 3) return;
-                else continue;
-
-                break;
-            }
+            System.out.println(sBuilder.toString());
+            System.out.print("Enter your choice: ");
+            
+            int num = UserInput.getNumberFromUser(1, exitNum);
+            if (num == exitNum) return;
+            menus[num-1].getMenu().run();
 
             System.out.println();
         }
