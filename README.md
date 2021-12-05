@@ -1,5 +1,5 @@
 # CS433 Project Encryption
-## Requirements
+## Compilation
 To manually compile and execute the program, use a JDK 11 or higher and do the following (outside the `src` folder):
 ```bash
     $> "path/to/jdk≥11/bin/javac.exe" -d out -cp src\ src\Main.java src\utils\*.java src\classes\*.java src\menus\*.java
@@ -9,6 +9,18 @@ Or run the latest `jar` file from [release](https://github.com/200-0K/CS433-Proj
 ```bash
     $> "path/to/jdk≥11/bin/java.exe" -jar Encryption.jar
 ```
+
+## Features
+- Can Encrypt/Decrypt/Hash all type of files e.g. (txt, png, pdf, exe, etc...)
+- Selecting a folder path when Encrypting/Decrypting/Hashing will process all files inside it
+
+### Available Encryption Algorithms:
+1. AES (192-bits)
+2. DESede/Triple DES (192-bits)
+
+### Available Hashing Algorithms:
+1. SHA-256
+2. SHA-512
 
 ## Main tasks:
 1. Implement a symmetric cryptographic system, using Java, that encrypts/decrypts all text files in a given folder or single text file. Your system should allow the user to choose between **DES** or **AES**.
