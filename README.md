@@ -2,7 +2,7 @@
 ## Compilation
 * _**To compile or run, JDK 11 or higher is required.**_
 
-To manually compile and execute the program, use a JDK 11 or higher and do the following (outside the `src` folder):
+To manually compile and run the program, use JDK 11 or higher and run the following commands (outside the `src` folder):
 ```bash
 $> "path/to/jdk≥11/bin/javac.exe" -d out -cp src\ src\Main.java src\utils\*.java src\classes\*.java src\menus\*.java
 $> "path/to/jdk≥11/bin/java.exe" -cp out\ Main
