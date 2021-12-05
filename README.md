@@ -2,12 +2,12 @@
 ## Compilation
 To manually compile and execute the program, use a JDK 11 or higher and do the following (outside the `src` folder):
 ```bash
-    $> "path/to/jdk≥11/bin/javac.exe" -d out -cp src\ src\Main.java src\utils\*.java src\classes\*.java src\menus\*.java
-    $> "path/to/jdk≥11/bin/java.exe" -cp out\ Main
+$> "path/to/jdk≥11/bin/javac.exe" -d out -cp src\ src\Main.java src\utils\*.java src\classes\*.java src\menus\*.java
+$> "path/to/jdk≥11/bin/java.exe" -cp out\ Main
 ```
 Or download & run the latest `jar` file from [release](https://github.com/200-0K/CS433-Project-Encryption/releases), with the following command:
 ```bash
-    $> "path/to/jdk≥11/bin/java.exe" -jar Encryption.jar
+$> "path/to/jdk≥11/bin/java.exe" -jar Encryption.jar
 ```
 
 ## Features
