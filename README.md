@@ -1,11 +1,11 @@
 # CS433 Project Encryption
 ## Requirements
-To manually compile and execute the program, use a JDK 9 or higher and do the following (outside the'src' folder):
+To manually compile and execute the program, use a JDK 9 or higher and do the following (outside the `src` folder):
 ```bash
     $> "path/to/jdk≥9/bin/javac.exe" -d out -cp src\ src\Main.java src\utils\*.java src\classes\*.java src\menus\*.java
     $> "path/to/jdk≥9/bin/java.exe" -cp out\ Main
 ```
-If you don't want to go through all of that, simply download the most recent executable file from [release](https://github.com/200-0K/CS433-Project-Encryption/releases)
+If you don't want to go through all of that, simply download the most recent executable file from [release](https://github.com/200-0K/CS433-Project-Encryption/releases).
 
 ## Main tasks:
 1. Implement a symmetric cryptographic system, using Java, that encrypts/decrypts all text files in a given folder or single text file. Your system should allow the user to choose between **DES** or **AES**.
