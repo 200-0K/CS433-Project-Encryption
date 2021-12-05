@@ -45,6 +45,7 @@ public class EncryptMenu implements IMenu{
 
     public void run() {
         while (true) {
+            System.out.println("----------------------");
             if (!selectModeMenu()) return;
             this.fileSystem = UserInput.getFileSystemFromUser();
             if (!selectAlogrithmMenu()) return;
@@ -64,16 +65,13 @@ public class EncryptMenu implements IMenu{
             sBuilder.append("Algorithm: ").append(transformation.getAlgorithm()).append("\n");
             sBuilder.append("Output: ").append(outputFiles.length).append(" file(s)").append("\n");
             sBuilder.append("Finished in: ").append(timer.getMeasuredTime()).append("\n");
-            if (outputFiles.length > 0) sBuilder.append("Output Path: '").append(outputFiles[0].getFile().getParent()).append("'\n");
-            sBuilder.append("--------------------------------------------------------------------------");
+            if (outputFiles.length > 0) sBuilder.append("Output Path: '").append(outputFiles[0].getFile().getParent());
             
             System.out.println(sBuilder.toString());
         }
     }
 
     private boolean selectModeMenu() {
-        System.out.println();
-
         // print avaliable modes
         MODE[] modes = MODE.values();
         StringBuilder sBuilder = new StringBuilder();

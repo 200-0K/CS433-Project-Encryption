@@ -2,10 +2,10 @@ package menus;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
 
 import classes.Hash;
 import classes.Hash.Algorithm;
+import utils.Bytes;
 import utils.FileSystem;
 import utils.UserInput;
 
@@ -16,13 +16,13 @@ public class HashMenu implements IMenu {
 
     public void run() {
         while (true) {
+            System.out.println("----------------------");
             if (!getAlgorithm()) return;
             processFiles();
         }
     }
 
     public boolean getAlgorithm() {
-        System.out.println();
         Algorithm[] algorithms = Algorithm.values();
         
         System.out.println("Choose an Algorithm:");
@@ -57,7 +57,7 @@ public class HashMenu implements IMenu {
                     hash.update(fileBytes);
                     if (isFinal) {
                         System.out.println(
-                            "* " + file.getFile().getName() + ": " + new BigInteger(1, hash.digest()).toString(16).toUpperCase()
+                            "* " + file.getFile().getName() + ": " + Bytes.encode(hash.digest())
                         );
                     }
                 });

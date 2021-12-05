@@ -37,7 +37,7 @@ public class UserInput {
     public static FileSystem getFileSystemFromUser() {
         Scanner sc = new Scanner(System.in);
         FileSystem file;
-        System.out.print("Type File/Directory Path: ");
+        System.out.print("Type File/Directory Path (Without Quotations Mark): ");
         while(true) {
             String path = "";
             try {
