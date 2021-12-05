@@ -1,46 +1,27 @@
-import java.util.Scanner;
+import menus.Menu;
+import utils.UserInput;
 
 public class Main {
-    
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Menu[] menus = Menu.values();
+        while (true) {
+            StringBuilder sBuilder = new StringBuilder();
+            sBuilder.append("MAIN MENU\n");
+            sBuilder.append("==========================================================================\n");
+            sBuilder.append("What do you need to implement?\n");
+            for (int i = 0; i < menus.length; i++) sBuilder.append(i+1).append(". ").append(menus[i].getMenuName()).append("\n");
+            
+            int exitNum = menus.length+1;
+            sBuilder.append(exitNum).append(". Exit");
 
-        System.out.println("MAIN MENU");
-        System.out.println("==========================================================================");
-        System.out.println("What do you need to implement?");
-        System.out.println("1. Encryption");
-        System.out.println("2. Hashing");
-        System.out.println("3. Exit");
+            System.out.println(sBuilder.toString());
+            System.out.print("Enter your choice: ");
+            
+            int num = UserInput.getNumberFromUser(1, exitNum);
+            if (num == exitNum) return;
+            menus[num-1].getMenu().run();
 
-        System.out.print("Enter your choice: ");
-        int choiceOne = sc.nextInt();
-
-        System.out.println("1. Encrypt");
-        System.out.println("2. Decryp");
-        System.out.println("3. Back to main menu");
-
-        System.out.println("----------------------");
-        System.out.print("Enter your choice: ");
-        int choiceTwo = sc.nextInt();
-
-        System.out.println("(1) File (2) Folder ");
-        System.out.print("Enter your choice: ");
-        int choiceThree = sc.nextInt();
-
-        System.out.print("Type your file name: ");
-        String fileName = sc.nextLine();
-
-        System.out.print("Choose the algorithm (AES, DES):");
-        String algorithm = sc.nextLine();
-
-        System.out.print("Enter the secret key:");
-        String secretKey = sc.nextLine();
-
-        System.out.println("----------------------");
-        System.out.println("Done! File text.txt is encrypted using AES-192");
-        System.out.println("Output file is ");
-        System.out.println("--------------------------------------------------------------------------");
-
-
+            System.out.println();
+        }
     }
 }
