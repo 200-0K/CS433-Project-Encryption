@@ -21,7 +21,7 @@ public class Main {
             if (num == exitNum) return;
             menus[num-1].getMenu().run();
 
-            System.out.println();
+            System.out.println("\033[H\033[2J"); // clear screen
         }
     }
 }
