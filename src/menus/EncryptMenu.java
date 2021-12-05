@@ -36,7 +36,7 @@ public class EncryptMenu implements IMenu{
     private Scanner sc;
     private FileSystem fileSystem;
     private MODE mode;
-    private Encrypt.TRANSFORMATION transformation;
+    private Encrypt.Transformation transformation;
     private String key;
 
     public EncryptMenu() {
@@ -77,31 +77,25 @@ public class EncryptMenu implements IMenu{
         // print avaliable modes
         MODE[] modes = MODE.values();
         StringBuilder sBuilder = new StringBuilder();
-        for (int i = 0; i < modes.length; i++) {
-            sBuilder.append(i+1).append(". ").append(modes[i].mode).append("\n");
-        }
-        sBuilder.append(modes.length+1).append(". Back to Main Menu\n");
+        for (int i = 0; i < modes.length; i++) sBuilder.append(i+1).append(". ").append(modes[i].mode).append("\n");
+        int backMenuNum = modes.length+1;
+        sBuilder.append(backMenuNum).append(". Back to Main Menu\n");
         sBuilder.append("----------------------");
-        System.out.println(sBuilder.toString());
 
-        while (true) {
-            System.out.print("Enter your choice: ");
-            int modeNum = UserInput.getNumberFromUser()-1;
-            try {
-                mode = modes[modeNum];
-                return true;
-            } catch (IndexOutOfBoundsException e) {
-                if (modeNum == modes.length) return false;
-                System.out.println("Please choose a number from the list");
-            }
-        }
+        System.out.println(sBuilder.toString());
+        System.out.print("Enter your choice: ");
+        
+        int modeNum = UserInput.getNumberFromUser(1, backMenuNum);
+        if (modeNum == backMenuNum) return false;
+        mode = modes[modeNum-1];
+        return true;
     }
 
     private boolean selectAlogrithmMenu() {
         System.out.println();
 
         // get avaliable encryption algorithms
-        Encrypt.TRANSFORMATION[] transformations = Encrypt.TRANSFORMATION.values();
+        Encrypt.Transformation[] transformations = Encrypt.Transformation.values();
 
         // print message with avaliable encryption algorithms
         StringBuilder sBuilder = new StringBuilder();
@@ -109,19 +103,15 @@ public class EncryptMenu implements IMenu{
         for (int i = 0; i < transformations.length; i++)
             sBuilder.append(i + 1).append(".").append(" ").append(transformations[i].getAlgorithm()).append("\n");
         sBuilder.append("----------------------");
+        
         System.out.println(sBuilder.toString());
+        System.out.print("Enter your choice: ");
 
         // get a valid number from the user
-        while (true) {
-            try {
-                System.out.print("Enter your choice: ");
-                int algorithmNum = UserInput.getNumberFromUser() - 1;
-                transformation = transformations[algorithmNum];
-                return true;
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Please choose a number from the list");
-            }
-        }
+        int algorithmNum = UserInput.getNumberFromUser(1, transformations.length+1);
+        transformation = transformations[algorithmNum-1];
+        
+        return true;
     }
 
     private boolean enterSecretKeyMenu() {
@@ -168,7 +158,7 @@ public class EncryptMenu implements IMenu{
                     try {
                         outputFile.append(encrypt.update(isFinal));
                         if (isFinal) {
-                            System.out.println("√ "+file.getFile().getName());
+                            System.out.println("* "+file.getFile().getName());
                             System.gc(); // run java garbage collector
                         }
                     } catch (IllegalBlockSizeException | BadPaddingException e) {

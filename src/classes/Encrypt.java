@@ -13,14 +13,14 @@ import javax.crypto.NoSuchPaddingException;
  * <p> Loop: Set Text ➔ Update </p>
  */
 public class Encrypt {
-    public enum TRANSFORMATION {
+    public enum Transformation {
         AES("AES", 24), 
         TDES("DESede", 24);
 
         private String transformation;
         private String algorithm;
         private int keySizeInBytes;
-        private TRANSFORMATION(String transformation, int keySizeInBytes) {
+        private Transformation(String transformation, int keySizeInBytes) {
             this.transformation = transformation;
             this.keySizeInBytes = keySizeInBytes;
             algorithm = transformation.split("/")[0];
@@ -32,14 +32,14 @@ public class Encrypt {
     }
 
     public static final String CHARSET = "UTF-8";
-    private TRANSFORMATION transformation;
+    private Transformation transformation;
     private byte[] text;
     private Key key;
     private Cipher cipher;
 
     private Encrypt(){}
 
-    public void setAlgorithm(Encrypt.TRANSFORMATION transformation) throws NoSuchAlgorithmException, NoSuchPaddingException  {
+    public void setAlgorithm(Encrypt.Transformation transformation) throws NoSuchAlgorithmException, NoSuchPaddingException  {
         this.transformation = transformation;
         cipher = Cipher.getInstance(transformation.getTransformation());
     }
@@ -66,16 +66,16 @@ public class Encrypt {
         return (isFinal) ? cipher.doFinal(text) : cipher.update(text);
     }
 
-    public TRANSFORMATION getTransformation() {
+    public Transformation getTransformation() {
         return transformation;
     }
 
     public static class Builder {
-        private TRANSFORMATION tr;
+        private Transformation tr;
         private String key;
         private boolean isEncryptMode;
 
-        public Builder setAlgorithm(TRANSFORMATION tr) {
+        public Builder setAlgorithm(Transformation tr) {
             this.tr = tr;
             return this;
         }
