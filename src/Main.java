@@ -20,8 +20,6 @@ public class Main {
             int num = UserInput.getNumberFromUser(1, exitNum);
             if (num == exitNum) return;
             menus[num-1].getMenu().run();
-
-            System.out.println("\033[H\033[2J"); // clear screen
         }
     }
 }
