@@ -24,6 +24,7 @@ $> java -jar "path/to/Encryption.jar"
 1. SHA-256
 2. SHA-512
 
+___________
 ## Main tasks:
 1. Implement a symmetric cryptographic system, using Java, that encrypts/decrypts all text files in a given folder or single text file. Your system should allow the user to choose between **DES** or **AES**.
 2. Implement a one-way hash function using Java, that generates a message digest of a given file. Your system should allow the user to choose between **SHA-256** or **SHA-512**.
@@ -39,56 +40,3 @@ $> java -jar "path/to/Encryption.jar"
 1. Create an instance of the class MessageDigest for the chosen algorithm. Refer to the document of the [MessageDigest](https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html) class for more information regarding supported algorithms.
 2. Invoke digest(input_bytes) method of the MessageDigest class to perform hashing on the input_bytes, which returns the generated message digest.
 3. Read an input file to a byte array and write the message digest to an output file accordingly.
-
-#### A code snippets from the main() method is provided below. Your code may look different though!
-```java
-    //encryption / decryption part 
-    String File inputFile = new File(filename);
-    // to encrypt 
-    File encryptedFile = new File(filename + ".encrypted");
-    // to decrypt 
-    File decryptedFile = new File(filename + ".decrypted");
-    try {
-        Crypto.encrypt(key, inputFile, encryptedFile);
-        Crypto.decrypt(key, encryptedFile, decryptedFile);
-    } catch (CryptoException ex) {
-        System.out.println(ex.getMessage());
-        ex.printStackTrace();
-    } 
-    //hashing part 
-    MessageDigest SHADigest = MessageDigest.getInstance(Chosen algorithm);
-    byte[] digest = SHADigest.digest(inputFile);
-```
-#### Sample Run
-
-    MAIN MENU 
-    ==========================================================================
-    What do you need to implement?
-    1. Encryption 
-    2. Hashing 
-    3. Exit
-    
-    Enter your choice: 1 
-    1. Encrypt
-    2. Decrypt
-    3. Back to main menu 
-    ---------------------- 
-    Enter your choice: 1 
-    (1) File (2) Folder 
-    Enter your choice: 1 
-    Type your file name: text.txt
-    Choose the algorithm (AES, DES): AES 
-    Enter the secret key : aaaaaaaaaaaaaaaaaaaaaaaa 
-    ----------------------
-    Done! File text.txt is encrypted using AES-192
-    Output file is text.encrypted 
-    --------------------------------------------------------------------------
-    
-    MAIN MENU 
-    ==========================================================================
-    What do you need to implement?
-    1. Encryption 
-    2. Hashing 
-    3. Exit
-    
-    Enter your choice: 3
