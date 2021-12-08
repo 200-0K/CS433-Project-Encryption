@@ -11,6 +11,7 @@ Or download the latest `jar` file from the [release](https://github.com/200-0K/C
 ```bash
 $> java -jar "path/to/Encryption.jar"
 ```
+* If you don't have JDK version 11 or higher, then simply download JRE version from the [release](https://github.com/200-0K/CS433-Project-Encryption/releases/latest) page, and execute `Run.bat`
 
 ## Features
 - Can Encrypt/Decrypt/Hash all type of files e.g. (txt, png, pdf, exe, etc...)
