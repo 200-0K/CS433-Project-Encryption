@@ -1,6 +1,6 @@
 # CS433 Project Encryption
 ## Compilation
-* _**To compile or run, JDK 11 or higher is required.**_
+* _**To compile and/or run, JDK 11 or higher is required.**_
 
 To manually compile and run the program, use JDK 11 or higher and run the following commands (outside the `src` folder):
 ```bash
@@ -11,7 +11,7 @@ Or download the latest `jar` file from the [release](https://github.com/200-0K/C
 ```bash
 $> java -jar "path/to/Encryption.jar"
 ```
-* If you don't have JDK version 11 or higher, then simply download the JRE version from the [release](https://github.com/200-0K/CS433-Project-Encryption/releases/latest) page, and execute `Run.bat`
+* If you don't have JRE version 11 or higher, then simply download the program bundled with the appropriate version of JRE from the [release](https://github.com/200-0K/CS433-Project-Encryption/releases/latest) page, and execute `Run.bat`
 
 ## Features
 - Can Encrypt/Decrypt/Hash all type of files e.g. (txt, png, pdf, exe, etc...)
