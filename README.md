@@ -1,4 +1,6 @@
 # CS433 Project Encryption
+A simple program that performs symmetric encryption/decryption and hashing on any type of file. 
+
 ## Compilation
 * _**To compile and/or run, JDK 11 or higher is required.**_
 
@@ -25,19 +27,6 @@ $> java -jar "path/to/Encryption.jar"
 1. SHA-256
 2. SHA-512
 
-___________
-## Main tasks:
-1. Implement a symmetric cryptographic system, using Java, that encrypts/decrypts all text files in a given folder or single text file. Your system should allow the user to choose between **DES** or **AES**.
-2. Implement a one-way hash function using Java, that generates a message digest of a given file. Your system should allow the user to choose between **SHA-256** or **SHA-512**.
-
-###  For the encryption\decryption part:
-1. Get the key from the user. DES algorithm requires a 64-bit key while AES operates on a default key size of 192 bits.
-2. Create an instance of the class Cipher for the chosen algorithm transformation. Refer to the document of the [Cipher](https://docs.oracle.com/javase/8/docs/api/javax/crypto/package-frame.html) class for more information regarding supported algorithms and transformations.
-3. Initialize the Cipher with an appropriate mode (encrypt or decrypt) and the given Key.
-4. Invoke the doFinal(input_bytes) method of the Cipher class to perform encryption or decryption on the input_bytes, which returns an encrypted or decrypted byte array.
-5. Read an input file to a byte array and write the encrypted/decrypted byte array to an output file accordingly.
-
-### For the hashing part:
-1. Create an instance of the class MessageDigest for the chosen algorithm. Refer to the document of the [MessageDigest](https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html) class for more information regarding supported algorithms.
-2. Invoke digest(input_bytes) method of the MessageDigest class to perform hashing on the input_bytes, which returns the generated message digest.
-3. Read an input file to a byte array and write the message digest to an output file accordingly.
+## Used Libraries:
+#### For the encryption\decryption part: [Cipher](https://docs.oracle.com/javase/8/docs/api/javax/crypto/package-frame.html)
+#### For the hashing part: [MessageDigest](https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html) 
