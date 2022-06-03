@@ -1,22 +1,24 @@
 package menus;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 
 import classes.Encrypt;
+import utils.Parallel;
+import utils.ParallelParameters;
 import utils.FileSystem;
 import utils.UserInput;
 import utils.Timer;
 
 public class EncryptMenu implements IMenu{
     private enum MODE {
-        Encrypt("Encrypt", "Encryption_"+System.currentTimeMillis(), true),
-        Decrypt("Decrypt", "Decryption_"+System.currentTimeMillis(), false);
+        Encrypt("Encrypt", "Encryption", true),
+        Decrypt("Decrypt", "Decryption", false);
 
         private String mode;
         private String dirName;
@@ -28,7 +30,7 @@ public class EncryptMenu implements IMenu{
             this.isEncryptMode = isEncryptMode;
         }   
         public String getMode() {return mode;}
-        public String getDirName() {return dirName;}
+        public String getDirName() {return dirName+"_"+System.currentTimeMillis();}
         public boolean isEncryptMode() {return isEncryptMode;}
         public String getSuffix() {return fileSuffix;}
     }
@@ -53,9 +55,8 @@ public class EncryptMenu implements IMenu{
             
             Timer timer = new Timer();
             timer.start();
-            Encrypt encrypt = buildEncrypt();
             FileSystem[] files = getFiles();
-            FileSystem[] outputFiles = processFiles(encrypt, files);
+            processFiles(files);
             timer.stop();
 
             StringBuilder sBuilder = new StringBuilder();
@@ -63,9 +64,7 @@ public class EncryptMenu implements IMenu{
             sBuilder.append("Done!\n");
             sBuilder.append("Mode: ").append(mode.getMode()).append("\n");
             sBuilder.append("Algorithm: ").append(transformation.getAlgorithm()).append("\n");
-            sBuilder.append("Output: ").append(outputFiles.length).append(" file(s)").append("\n");
             sBuilder.append("Finished in: ").append(timer.getMeasuredTime()).append("\n");
-            if (outputFiles.length > 0) sBuilder.append("Output Path: '").append(outputFiles[0].getFile().getParent());
             
             System.out.println(sBuilder.toString());
         }
@@ -106,7 +105,7 @@ public class EncryptMenu implements IMenu{
         System.out.print("Enter your choice: ");
 
         // get a valid number from the user
-        int algorithmNum = UserInput.getNumberFromUser(1, transformations.length+1);
+        int algorithmNum = UserInput.getNumberFromUser(1, transformations.length);
         transformation = transformations[algorithmNum-1];
         
         return true;
@@ -144,38 +143,45 @@ public class EncryptMenu implements IMenu{
         return files;
     }
 
-    private FileSystem[] processFiles(Encrypt encrypt, FileSystem[] files) {
-        ArrayList<FileSystem> newFiles = new ArrayList<>();
-        for (FileSystem file : files) {
-            try {
-                FileSystem outputDir = file.createDirectory(mode.getDirName());
-                FileSystem outputFile = outputDir.createFile(getNewFileName(file.getFile().getName()));
+    private void processFiles(FileSystem[] files) {
+        String dirName = mode.getDirName();
 
-                file.read((fileBytes, isFinal) -> {
-                    encrypt.setText(fileBytes);
-                    try {
-                        outputFile.append(encrypt.update(isFinal));
-                        if (isFinal) {
-                            System.out.println("* "+file.getFile().getName());
-                            System.gc(); // run java garbage collector
+        Parallel.runParallel(files.length, (ParallelParameters parallelParameters) -> {
+            Encrypt encrypt = buildEncrypt();
+
+            int my_rank = parallelParameters.my_rank;
+            int my_start = parallelParameters.my_start;
+            int my_last = parallelParameters.my_last;
+            for (int i = my_start; i < my_last; i++) {
+                FileSystem file = files[i];
+
+                try {
+                    FileSystem outputDir = file.createDirectory(dirName);
+                    FileSystem outputFile = outputDir.createFile(getNewFileName(file.getFile().getName()));
+    
+                    file.read((fileBytes, isFinal) -> {
+                        encrypt.setText(fileBytes);
+                        try {
+                            outputFile.append(encrypt.update(isFinal));
+                            if (isFinal) {
+                                System.out.println("* Thread " + my_rank + ": " + file.getFile().getName() + " -> " + outputFile.getFile().getParentFile().getName() + File.separator + outputFile.getFile().getName());
+                                // System.gc(); // run java garbage collector
+                            }
+                        } catch (IllegalBlockSizeException | BadPaddingException e) {
+                            System.out.println("Encryption/Decryption Failed: " + e.getMessage());
+                            return;
+                        } catch (IOException e) {
+                            System.out.println("I/O Error");
+                            e.printStackTrace();
+                            return;
                         }
-                    } catch (IllegalBlockSizeException | BadPaddingException e) {
-                        System.out.println("Encryption/Decryption Failed: " + e.getMessage());
-                        return;
-                    } catch (IOException e) {
-                        System.out.println("I/O Error");
-                        e.printStackTrace();
-                        return;
-                    }
-                });
-
-                newFiles.add(outputFile);
-            } catch (FileNotFoundException e) {
-                System.out.println(file.getFile().getAbsolutePath() + " is Not Found");
-            } catch (Exception e) {e.printStackTrace();}
-        }
-
-        return newFiles.toArray(new FileSystem[0]);
+                    });
+    
+                }
+                catch (FileNotFoundException e) { System.out.println(file.getFile().getAbsolutePath() + " is Not Found"); } 
+                catch (Exception e) { e.printStackTrace(); }
+            }
+        });
     }
 
     private String getNewFileName(String fileName) {
