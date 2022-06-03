@@ -1,4 +1,4 @@
-# CS433 Project Encryption
+# About
 A simple program that performs **parallel** symmetric encryption/decryption and hashing on any type of file.
 
 ## Compilation
