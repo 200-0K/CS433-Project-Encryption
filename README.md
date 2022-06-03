@@ -10,11 +10,11 @@ $> "path/to/jdk≥11/bin/javac.exe" -d ..\out -cp .\ *.java
 $> cd ..\out
 $> "path/to/jdk≥11/bin/java.exe" -cp .\ Main
 ```
-Or download the latest `jar` file from the [release](https://github.com/200-0K/CS433-Project-Encryption/releases/latest) page, and run the following:
+Or download the latest `jar` file from the [release](https://github.com/200-0K/Parallel-Encryption/releases/latest) page, and run the following:
 ```bash
 $> java -jar "path/to/Encryption.jar"
 ```
-* If you don't have JRE version 11 or higher, then simply download the program bundled with the appropriate version of JRE from the [release](https://github.com/200-0K/CS433-Project-Encryption/releases/latest) page, and execute `Run.bat`
+* If you don't have JRE version 11 or higher, then simply download the program bundled with the appropriate version of JRE from the [release](https://github.com/200-0K/Parallel-Encryption/releases/latest) page, and execute `Run.bat`
 
 ## Features
 - Can Encrypt/Decrypt/Hash all type of files e.g. (txt, png, pdf, exe, etc...)
