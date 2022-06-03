@@ -1,13 +1,14 @@
 # CS433 Project Encryption
-A simple program that performs symmetric encryption/decryption and hashing on any type of file. 
+A simple program that performs **parallel** symmetric encryption/decryption and hashing on any type of file.
 
 ## Compilation
 * _**To compile and/or run, JDK 11 or higher is required.**_
 
-To manually compile and run the program, use JDK 11 or higher and run the following commands (outside the `src` folder):
+To manually compile and run the program, use JDK 11 or higher and run the following commands (inside the `src` folder):
 ```bash
-$> "path/to/jdk≥11/bin/javac.exe" -d out -cp src\ src\Main.java src\utils\*.java src\classes\*.java src\menus\*.java
-$> "path/to/jdk≥11/bin/java.exe" -cp out\ Main
+$> "path/to/jdk≥11/bin/javac.exe" -d ..\out -cp .\ *.java
+$> cd ..\out
+$> "path/to/jdk≥11/bin/java.exe" -cp .\ Main
 ```
 Or download the latest `jar` file from the [release](https://github.com/200-0K/CS433-Project-Encryption/releases/latest) page, and run the following:
 ```bash
