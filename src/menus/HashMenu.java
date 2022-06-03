@@ -2,23 +2,37 @@ package menus;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import classes.Hash;
 import classes.Hash.Algorithm;
 import utils.Bytes;
 import utils.FileSystem;
+import utils.Parallel;
+import utils.ParallelParameters;
 import utils.UserInput;
+import utils.Timer;
 
 public class HashMenu implements IMenu {
 
-    private Hash hash = new Hash();
     private FileSystem fileSystem;
+    private Algorithm algorithm;
 
     public void run() {
         while (true) {
             System.out.println("----------------------");
             if (!getAlgorithm()) return;
-            processFiles();
+
+            this.fileSystem = UserInput.getFileSystemFromUser();
+            FileSystem[] files = getFiles();
+
+            Timer timer = new Timer();
+            timer.start();
+
+            processFiles(files);
+
+            timer.stop();
+            System.out.println("Finish in: "+timer.stop());
         }
     }
 
@@ -37,7 +51,7 @@ public class HashMenu implements IMenu {
         if (algorithmNum == backMenuNum) return false;
         
         try {
-            hash.setAlgorithm(algorithms[algorithmNum - 1]);
+            this.algorithm = algorithms[algorithmNum - 1];
             return true;
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -46,25 +60,36 @@ public class HashMenu implements IMenu {
         return false;
     }
 
-    public void processFiles() {
+    public void processFiles(FileSystem[] files) {
         System.out.println();
-        this.fileSystem = UserInput.getFileSystemFromUser();
-        FileSystem[] files = getFiles();
-
-        for (FileSystem file : files) {
+        
+        Parallel.runParallel(files.length, (ParallelParameters parallelParameters) -> {
+            Hash hash = new Hash();
             try {
-                file.read((fileBytes, isFinal) -> {
-                    hash.update(fileBytes);
-                    if (isFinal) {
-                        System.out.println(
-                            "* " + file.getFile().getName() + ": " + Bytes.encode(hash.digest())
-                        );
-                    }
-                });
-            } catch (FileNotFoundException e) {
-                System.out.println(file.getFile().getAbsolutePath() + " is Not Found");
-            }catch (IOException e) { System.out.println("I/O Error: " + e.getMessage()); }
-        }
+                hash.setAlgorithm(this.algorithm);
+            } catch (NoSuchAlgorithmException e) {e.printStackTrace(); return;}
+
+            int my_rank = parallelParameters.my_rank;
+            int my_start = parallelParameters.my_start;
+            int my_last = parallelParameters.my_last;
+            for (int i = my_start; i < my_last; i++) {
+                FileSystem file = files[i];
+
+                try {
+                    file.read((fileBytes, isFinal) -> {
+                        hash.update(fileBytes);
+                        if (isFinal) {
+                            System.out.print(
+                                "* Thread " + my_rank + ": " + file.getFile().getName() + ": " + Bytes.encode(hash.digest()) + "\n"
+                            );
+                        }
+                    });
+                }
+                catch (FileNotFoundException e) { System.out.println(file.getFile().getAbsolutePath() + " is Not Found"); } 
+                catch (IOException e) { System.out.println("I/O Error: " + e.getMessage()); }
+                catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
+            }
+        });
     }
 
     private FileSystem[] getFiles() {
